@@ -1,4 +1,4 @@
-package genFigSpec
+package GenFigSpec
 
 import (
 	"fmt"
