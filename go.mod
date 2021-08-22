@@ -1,4 +1,4 @@
-module github.com/EthanOrlander/GenFigSpec
+module github.com/EthanOrlander/genFigSpec
 
 go 1.17
 
