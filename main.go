@@ -24,8 +24,9 @@ import (
 )
 
 var GenFigSpec = &cobra.Command{
-	Use:   "genFigSpec",
-	Short: "Generate a fig spec",
+	Use:    "genFigSpec",
+	Short:  "Generate a fig spec",
+	Hidden: true,
 	Long: `
 Fig is a tool for your command line that adds autocomplete.
 This command generates a TypeScript file with the skeleton
