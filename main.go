@@ -109,9 +109,8 @@ func flagArguments(flag *pflag.Flag) []Arg {
 	var args []Arg
 	if flag.Value.Type() != "bool" {
 		arg := Arg{
-			name:        flag.Name,
-			description: flag.Usage,
-			defaultVal:  flag.DefValue,
+			name:       flag.Name,
+			defaultVal: flag.DefValue,
 		}
 		args = append(args, arg)
 	}
