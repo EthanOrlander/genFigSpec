@@ -37,6 +37,7 @@ You'll also see a file [**fig/pulumi.ts**](https://github.com/EthanOrlander/pulu
       3. Add `GenFigSpec` command to root command
          - Root command reference (within root file) provided as environment variable
       4. Build
+         - Action will also require direction for how to build
       5. Run `cli genFigSpec`
       6. Publish fig spec *somewhere?*
          - Maybe run a diff on the previous fig spec, and make a PR to [withfig/autocomplete](https://github.com/withfig/autocomplete) if anything's changed
