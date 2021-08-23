@@ -23,6 +23,8 @@ import (
 	"github.com/spf13/pflag"
 )
 
+var includeHidden bool
+
 var GenFigSpec = &cobra.Command{
 	Use:    "genFigSpec",
 	Short:  "Generate a fig spec",
@@ -57,7 +59,7 @@ func makeFigSpec(root *cobra.Command) Spec {
 func subcommands(cmd *cobra.Command) []Subcommand {
 	var subs []Subcommand
 	for _, sub := range cmd.Commands() {
-		if !sub.IsAvailableCommand() || sub.IsAdditionalHelpTopicCommand() {
+		if !includeHidden && (!sub.IsAvailableCommand() || sub.IsAdditionalHelpTopicCommand()) {
 			continue
 		}
 		subs = append(subs, Subcommand{
@@ -115,4 +117,10 @@ func flagArguments(flag *pflag.Flag) []Arg {
 		args = append(args, arg)
 	}
 	return args
+}
+
+func init() {
+	GenFigSpec.Flags().BoolVar(
+		&includeHidden, "include-hidden", false,
+		"Include hidden commands in generated Fig autocomplete spec")
 }
