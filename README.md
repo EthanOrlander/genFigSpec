@@ -18,7 +18,7 @@ The method of usage will evolve quickly as this package is developed. This is ho
 
 As an example, I have performed the above steps in [this fork of pulumi](https://github.com/EthanOrlander/pulumi/tree/genFigSpec).
 You'll see that [**pkg/cmd/pulumi/pulumi.go**](https://github.com/EthanOrlander/pulumi/blob/genFigSpec/pkg/cmd/pulumi/pulumi.go#L39) now imports this package and attaches the command on [line 218](https://github.com/EthanOrlander/pulumi/blob/genFigSpec/pkg/cmd/pulumi/pulumi.go#L218) using `cmd.AddCommand(genFigSpec.GenFigSpec)`.
-You'll also see a file [**fig/pulumi.ts**](https://github.com/EthanOrlander/pulumi/blob/genFigSpec/fig/pulumi.ts) that contains the skeleton Fig autocomplete spec for Pulumi. (I ran it through Fig's linter manually if you're wondering why it looks formatted)
+You'll also see a file [**fig/pulumi.ts**](https://github.com/EthanOrlander/pulumi/blob/genFigSpec/fig/pulumi.ts) that contains the generated skeleton Fig autocomplete spec for Pulumi. (I ran it through Fig's linter manually if you're wondering why it looks formatted)
 
 ## What's next
 
