@@ -25,7 +25,6 @@ You'll also see a file [**fig/pulumi.ts**](https://github.com/EthanOrlander/pulu
 1. Complete spec generator
     - Decide how to handle command arguments
       - It appears that in a Cobra CLI you only specify whether or not a command takes arguments, and the number or number range of arguments. The arguments are not defined with any other information (such as names)
-    - Decide whether or not to include hidden commands in generated spec. Perhaps we add a Cobra Flag for this to the command, which defaults to false
     - It looks like when the package is imported to a Cobra CLI, it is updating some dependencies.
         - Appears this can be solved by using this package as a plugin
         - Alternatively, I can adjust this package so it's dependency versions align with those of Cobra
