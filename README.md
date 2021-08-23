@@ -33,7 +33,7 @@ You'll also see a file **fig/pulumi.ts** that contains the skeleton Fig autocomp
       2. Add "github.com/EthanOrlander/genFigSpec" import to Cobra CLI root
          - Root file path provided as environment variable
       3. Add `GenFigSpec` command to root command
-         - Root command location (within root file) provided as environment variable
+         - Root command reference (within root file) provided as environment variable
       4. Build
       5. Run `cli genFigSpec`
       6. Publish fig spec *somewhere?*
