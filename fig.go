@@ -169,7 +169,9 @@ func (arg *Arg) toTypescript() string {
 	var sb strings.Builder
 	sb.WriteString("{")
 	sb.WriteString(fmt.Sprintf(`name: "%v",`, arg.name))
-	sb.WriteString(fmt.Sprintf(`description: "%v",`, arg.description))
+	if arg.description != "" {
+		sb.WriteString(fmt.Sprintf(`description: "%v",`, arg.description))
+	}
 	if arg.defaultVal != "" {
 		sb.WriteString(fmt.Sprintf(`default: "%v",`, arg.defaultVal))
 	}
