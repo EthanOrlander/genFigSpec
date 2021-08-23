@@ -8,11 +8,12 @@ This package is still in development. The end goal is for it to be used in a Git
 
 The method of usage will evolve quickly as this package is developed. This is how you should use it in its current state:
 
-1. In your Cobra CLI's source code, import this package in the root file of the CLI
+1. Add dependency to project using `go get github.com/EthanOrlander/genFigSpec`
+2. In your Cobra CLI's source code, import this package in the file containing the root command
     - Add "github.com/EthanOrlander/genFigSpec" to imports
-2. Attach the `GenFigSpec` command to the root command. This will look like `<rootCmd>.AddCommand(genFigSpec.GenFigSpec)`
-3. Once you rebuild the CLI with this update, simply use `<cliname> genFigSpec > <cliname>.ts` in your command line.
-4. This creates a TypeScript file **\<cliname\>.ts** containing the skeletal Fig autocomplete spec for your CLI. It can now be copied to [fig/autocomplete](https://github.com/withfig/autocomplete) and completed.
+3. Attach the `GenFigSpec` command to the root command. This will look like `<rootCmd>.AddCommand(genFigSpec.GenFigSpec)`
+4. Once you rebuild the CLI with this update, simply use `<cliname> genFigSpec > <cliname>.ts` in your command line.
+5. This creates a TypeScript file **\<cliname\>.ts** containing the skeletal Fig autocomplete spec for your CLI. It can now be copied to [fig/autocomplete](https://github.com/withfig/autocomplete) and completed.
 
 ## Example
 
@@ -31,13 +32,14 @@ You'll also see a file [**fig/pulumi.ts**](https://github.com/EthanOrlander/pulu
 2. Create GitHub Action
     - Action could work as follows:
       1. Clone repo
-      2. Add "github.com/EthanOrlander/genFigSpec" import to Cobra CLI root
+      2. Add dependency to project using `go get github.com/EthanOrlander/genFigSpec`
+      3. Add "github.com/EthanOrlander/genFigSpec" import to Cobra CLI root file
          - Root file path provided as environment variable
-      3. Add `GenFigSpec` command to root command
+      4. Add `GenFigSpec` command to root command
          - Root command reference (within root file) provided as environment variable
-      4. Build
+      5. Build
          - Action will also require direction for how to build
-      5. Run `cli genFigSpec`
-      6. Publish fig spec *somewhere?*
+      6. Run `cli genFigSpec`
+      7. Publish fig spec *somewhere?*
          - Maybe run a diff on the previous fig spec, and make a PR to [withfig/autocomplete](https://github.com/withfig/autocomplete) if anything's changed
          - This gets more complicated since this utility only generates a *partial skeleton*, and will be modified after
