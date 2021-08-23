@@ -59,7 +59,7 @@ func makeFigSpec(root *cobra.Command) Spec {
 func subcommands(cmd *cobra.Command) []Subcommand {
 	var subs []Subcommand
 	for _, sub := range cmd.Commands() {
-		if !includeHidden && (!sub.IsAvailableCommand() || sub.IsAdditionalHelpTopicCommand()) {
+		if !includeHidden && (!sub.IsAvailableCommand() || sub.IsAdditionalHelpTopicCommand() || sub.Hidden) {
 			continue
 		}
 		subs = append(subs, Subcommand{
