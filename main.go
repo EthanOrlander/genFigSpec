@@ -35,12 +35,12 @@ Fig autocomplete spec for your Cobra CLI.
 	Run: func(cmd *cobra.Command, args []string) {
 		root := cmd.Root()
 		spec := makeFigSpec(root)
-		fmt.Println(spec)
+		fmt.Println(spec.toTypescript())
 	},
 }
 
-func makeFigSpec(root *cobra.Command) string {
-	spec := &Spec{
+func makeFigSpec(root *cobra.Command) Spec {
+	spec := Spec{
 		Subcommand: &Subcommand{
 			BaseSuggestion: &BaseSuggestion{
 				description: root.Short,
@@ -51,7 +51,7 @@ func makeFigSpec(root *cobra.Command) string {
 		},
 		name: root.Name(),
 	}
-	return spec.toTypescript()
+	return spec
 }
 
 func subcommands(cmd *cobra.Command) []Subcommand {
