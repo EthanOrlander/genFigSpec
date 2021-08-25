@@ -24,7 +24,7 @@ You'll also see a file [**fig/pulumi.ts**](https://github.com/EthanOrlander/pulu
 
 ## What's next
 
-1. Complete spec generator
+1. Complete spec generator - See [issues](https://github.com/EthanOrlander/genFigSpec/issues)
     - Decide how to handle command arguments
       - Shell completions look like a promising reference
       - It appears that in a Cobra CLI you only specify whether or not a command takes arguments, and the number or number range of arguments. The arguments are not defined with any other information (such as names)
