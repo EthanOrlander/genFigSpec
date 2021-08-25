@@ -77,23 +77,25 @@ func subcommands(cmd *cobra.Command) []Subcommand {
 
 func options(cmd *cobra.Command) []Option {
 	var opts []Option
-	cmd.Flags().VisitAll(func(flag *pflag.Flag) {
-		name := []string{fmt.Sprintf("--%v", flag.Name)}
-		if flag.Shorthand != "" {
-			name = append(name, fmt.Sprintf("-%v", flag.Shorthand))
-		}
+	attachFlags := func(flag *pflag.Flag) {
 		option := Option{
 			BaseSuggestion: &BaseSuggestion{
 				displayName: flag.Name,
 				description: flag.Usage,
 			},
-			name:         name,
+			name:         []string{fmt.Sprintf("--%v", flag.Name)},
 			isRepeatable: strings.Contains(strings.ToLower(flag.Value.Type()), "array"),
 		}
+		if flag.Shorthand != "" {
+			option.name = append(option.name, fmt.Sprintf("-%v", flag.Shorthand))
+		}
 		option.args = flagArguments(flag)
-
 		opts = append(opts, option)
-	})
+	}
+	// cmd.PersistentFlags().VisitAll(attachFlags)
+	// cmd.LocalFlags().VisitAll(attachFlags)
+	cmd.InheritedFlags().VisitAll(attachFlags)
+	cmd.NonInheritedFlags().VisitAll(attachFlags)
 	return opts
 }
 
@@ -104,6 +106,11 @@ func options(cmd *cobra.Command) []Option {
  */
 func commandArguments(cmd *cobra.Command) []Arg {
 	var args []Arg
+	// switch t := cmd.Args.(T) {
+	// case cobra.ArbitraryArgs:
+
+	// }
+	// fmt.Println(cmd.Args)
 	return args
 }
 

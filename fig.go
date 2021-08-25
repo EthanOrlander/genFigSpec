@@ -80,6 +80,14 @@ const (
 	Filepaths
 )
 
+func sanitize(str string) string {
+	sanitized := str
+	sanitized = strings.ReplaceAll(sanitized, "\"", "\\\"")
+	sanitized = strings.ReplaceAll(sanitized, "'", "\\'")
+	sanitized = strings.ReplaceAll(sanitized, "\n", " ")
+	return sanitized
+}
+
 func (names *Names) toTypescript() string {
 	var sb strings.Builder
 	sb.WriteString("[")
@@ -94,7 +102,7 @@ func (spec *Spec) toTypescript() string {
 	var sb strings.Builder
 	sb.WriteString("const completionSpec: Fig.Spec = {")
 	sb.WriteString(fmt.Sprintf(`name: "%v",`, spec.name))
-	sb.WriteString(fmt.Sprintf(`description: "%v",`, spec.description))
+	sb.WriteString(fmt.Sprintf(`description: "%v",`, sanitize(spec.description)))
 	if len(spec.subcommands) > 0 {
 		sb.WriteString(fmt.Sprintf(`subcommands: %v,`, spec.subcommands.toTypescript()))
 	}
@@ -119,7 +127,7 @@ func (subcommand *Subcommand) toTypescript() string {
 	var sb strings.Builder
 	sb.WriteString("{")
 	sb.WriteString(fmt.Sprintf(`name: %v,`, subcommand.name.toTypescript()))
-	sb.WriteString(fmt.Sprintf(`description: "%v",`, subcommand.description))
+	sb.WriteString(fmt.Sprintf(`description: "%v",`, sanitize(subcommand.description)))
 	if len(subcommand.subcommands) > 0 {
 		sb.WriteString(fmt.Sprintf(`subcommands: %v,`, subcommand.subcommands.toTypescript()))
 	}
@@ -144,7 +152,7 @@ func (option *Option) toTypescript() string {
 	var sb strings.Builder
 	sb.WriteString("{")
 	sb.WriteString(fmt.Sprintf(`name: %v,`, option.name.toTypescript()))
-	sb.WriteString(fmt.Sprintf(`description: "%v",`, option.description))
+	sb.WriteString(fmt.Sprintf(`description: "%v",`, sanitize(option.description)))
 	if option.isRepeatable {
 		sb.WriteString(fmt.Sprintf(`isRepeatable: %t,`, option.isRepeatable))
 	}
@@ -170,7 +178,7 @@ func (arg *Arg) toTypescript() string {
 	sb.WriteString("{")
 	sb.WriteString(fmt.Sprintf(`name: "%v",`, arg.name))
 	if arg.description != "" {
-		sb.WriteString(fmt.Sprintf(`description: "%v",`, arg.description))
+		sb.WriteString(fmt.Sprintf(`description: "%v",`, sanitize(arg.description)))
 	}
 	if arg.defaultVal != "" {
 		sb.WriteString(fmt.Sprintf(`default: "%v",`, arg.defaultVal))
