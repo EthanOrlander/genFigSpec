@@ -41,6 +41,21 @@ Fig autocomplete spec for your Cobra CLI.
 	},
 }
 
+func makeFigSpec(root *cobra.Command) Spec {
+	spec := Spec{
+		Subcommand: &Subcommand{
+			BaseSuggestion: &BaseSuggestion{
+				description: root.Short,
+			},
+			options:     append(options(root.InheritedFlags()), options(root.NonInheritedFlags())...),
+			subcommands: append(subcommands(root), makeHelpCommand(root)),
+			args:        commandArguments(root),
+		},
+		name: root.Name(),
+	}
+	return spec
+}
+
 func makeHelpCommand(root *cobra.Command) Subcommand {
 	help := Subcommand{
 		BaseSuggestion: &BaseSuggestion{
@@ -51,23 +66,6 @@ func makeHelpCommand(root *cobra.Command) Subcommand {
 		subcommands: _subcommands(root, true, options(root.PersistentFlags())),
 	}
 	return help
-}
-
-func makeFigSpec(root *cobra.Command) Spec {
-	subcommands := subcommands(root)
-	subcommands = append(subcommands, makeHelpCommand(root))
-	spec := Spec{
-		Subcommand: &Subcommand{
-			BaseSuggestion: &BaseSuggestion{
-				description: root.Short,
-			},
-			options:     append(options(root.InheritedFlags()), options(root.NonInheritedFlags())...),
-			subcommands: subcommands,
-			args:        commandArguments(root),
-		},
-		name: root.Name(),
-	}
-	return spec
 }
 
 func subcommands(cmd *cobra.Command) Subcommands {
