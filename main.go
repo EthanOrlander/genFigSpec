@@ -42,30 +42,20 @@ Fig autocomplete spec for your Cobra CLI.
 }
 
 func makeFigSpec(root *cobra.Command) Spec {
+	opts := append(options(root.InheritedFlags()), options(root.NonInheritedFlags())...)
+	opts = append(opts, makeHelpOption(root.Name()))
 	spec := Spec{
 		Subcommand: &Subcommand{
 			BaseSuggestion: &BaseSuggestion{
 				description: root.Short,
 			},
-			options:     append(options(root.InheritedFlags()), options(root.NonInheritedFlags())...),
-			subcommands: append(subcommands(root), makeHelpCommand(root)),
+			options:     opts,
+			subcommands: append(subcommands(root), makeHelpCommand(root)), // We assume CLI is using default help command
 			args:        commandArguments(root),
 		},
 		name: root.Name(),
 	}
 	return spec
-}
-
-func makeHelpCommand(root *cobra.Command) Subcommand {
-	help := Subcommand{
-		BaseSuggestion: &BaseSuggestion{
-			description: "Help about any command",
-		},
-		name:        []string{"help"},
-		options:     options(root.PersistentFlags()),
-		subcommands: _subcommands(root, true, options(root.PersistentFlags())),
-	}
-	return help
 }
 
 func subcommands(cmd *cobra.Command) Subcommands {
@@ -74,16 +64,17 @@ func subcommands(cmd *cobra.Command) Subcommands {
 
 func _subcommands(cmd *cobra.Command, overrideOptions bool, overrides Options) Subcommands {
 	var subs []Subcommand
-	var opts Options
-	if overrideOptions {
-		opts = overrides
-	} else {
-		opts = append(options(cmd.InheritedFlags()), options(cmd.NonInheritedFlags())...)
-	}
 	for _, sub := range cmd.Commands() {
 		if sub.Name() == "help" || (!includeHidden && sub.Hidden) {
 			continue
 		}
+		var opts Options
+		if overrideOptions {
+			opts = overrides
+		} else {
+			opts = append(options(sub.InheritedFlags()), options(sub.NonInheritedFlags())...)
+		}
+		opts = append(opts, makeHelpOption(sub.Name())) // We assume every command has access to the default --help flag
 		subs = append(subs, Subcommand{
 			BaseSuggestion: &BaseSuggestion{
 				description: sub.Short,
@@ -144,6 +135,27 @@ func flagArguments(flag *pflag.Flag) []Arg {
 		args = append(args, arg)
 	}
 	return args
+}
+
+func makeHelpCommand(root *cobra.Command) Subcommand {
+	return Subcommand{
+		BaseSuggestion: &BaseSuggestion{
+			description: "Help about any command",
+		},
+		name:        []string{"help"},
+		options:     append(options(root.PersistentFlags()), makeHelpOption("help")),
+		subcommands: _subcommands(root, true, options(root.PersistentFlags())),
+	}
+}
+
+func makeHelpOption(commandName string) Option {
+	return Option{
+		BaseSuggestion: &BaseSuggestion{
+			displayName: "help",
+			description: fmt.Sprintf("help for %v", commandName),
+		},
+		name: []string{"--help", "-h"},
+	}
 }
 
 func init() {
