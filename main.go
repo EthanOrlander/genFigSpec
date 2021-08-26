@@ -95,6 +95,7 @@ func options(cmd *cobra.Command) []Option {
 	/* Help command doesn't appear to be included in any of the FlagSets
 	 * Find another way to include the help command if it's available in the CLI
 	 */
+	cmd.InheritedFlags().VisitAll(attachFlags)
 	cmd.NonInheritedFlags().VisitAll(attachFlags)
 	return opts
 }
