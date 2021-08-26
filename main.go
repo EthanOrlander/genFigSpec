@@ -41,14 +41,28 @@ Fig autocomplete spec for your Cobra CLI.
 	},
 }
 
+func makeHelpCommand(root *cobra.Command) Subcommand {
+	help := Subcommand{
+		BaseSuggestion: &BaseSuggestion{
+			description: "Help about any command",
+		},
+		name:        []string{"help"},
+		options:     options(root.PersistentFlags()),
+		subcommands: _subcommands(root, true, options(root.PersistentFlags())),
+	}
+	return help
+}
+
 func makeFigSpec(root *cobra.Command) Spec {
+	subcommands := subcommands(root)
+	subcommands = append(subcommands, makeHelpCommand(root))
 	spec := Spec{
 		Subcommand: &Subcommand{
 			BaseSuggestion: &BaseSuggestion{
 				description: root.Short,
 			},
-			options:     options(root),
-			subcommands: subcommands(root),
+			options:     append(options(root.InheritedFlags()), options(root.NonInheritedFlags())...),
+			subcommands: subcommands,
 			args:        commandArguments(root),
 		},
 		name: root.Name(),
@@ -56,10 +70,20 @@ func makeFigSpec(root *cobra.Command) Spec {
 	return spec
 }
 
-func subcommands(cmd *cobra.Command) []Subcommand {
+func subcommands(cmd *cobra.Command) Subcommands {
+	return _subcommands(cmd, false, []Option{})
+}
+
+func _subcommands(cmd *cobra.Command, overrideOptions bool, overrides Options) Subcommands {
 	var subs []Subcommand
+	var opts Options
+	if overrideOptions {
+		opts = overrides
+	} else {
+		opts = append(options(cmd.InheritedFlags()), options(cmd.NonInheritedFlags())...)
+	}
 	for _, sub := range cmd.Commands() {
-		if !includeHidden && (!sub.IsAvailableCommand() || sub.IsAdditionalHelpTopicCommand() || sub.Hidden) {
+		if sub.Name() == "help" || (!includeHidden && sub.Hidden) {
 			continue
 		}
 		subs = append(subs, Subcommand{
@@ -67,7 +91,7 @@ func subcommands(cmd *cobra.Command) []Subcommand {
 				description: sub.Short,
 			},
 			name:        append(sub.Aliases, sub.Name()),
-			options:     options(sub),
+			options:     opts,
 			subcommands: subcommands(sub),
 			args:        commandArguments(sub),
 		})
@@ -75,7 +99,7 @@ func subcommands(cmd *cobra.Command) []Subcommand {
 	return subs
 }
 
-func options(cmd *cobra.Command) []Option {
+func options(flagSet *pflag.FlagSet) []Option {
 	var opts []Option
 	attachFlags := func(flag *pflag.Flag) {
 		option := Option{
@@ -92,11 +116,8 @@ func options(cmd *cobra.Command) []Option {
 		option.args = flagArguments(flag)
 		opts = append(opts, option)
 	}
-	/* Help command doesn't appear to be included in any of the FlagSets
-	 * Find another way to include the help command if it's available in the CLI
-	 */
-	cmd.InheritedFlags().VisitAll(attachFlags)
-	cmd.NonInheritedFlags().VisitAll(attachFlags)
+
+	flagSet.VisitAll(attachFlags)
 	return opts
 }
 
