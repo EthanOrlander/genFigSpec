@@ -127,10 +127,14 @@ func commandArguments(cmd *cobra.Command) []Arg {
 
 func flagArguments(flag *pflag.Flag) []Arg {
 	var args []Arg
+	defaultVal := flag.DefValue
+	if defaultVal == "[]" {
+		defaultVal = ""
+	}
 	if flag.Value.Type() != "bool" {
 		arg := Arg{
 			name:       flag.Name,
-			defaultVal: flag.DefValue,
+			defaultVal: defaultVal,
 		}
 		args = append(args, arg)
 	}
