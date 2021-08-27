@@ -186,6 +186,18 @@ func (arg *Arg) toTypescript() string {
 	if arg.defaultVal != "" {
 		sb.WriteString(fmt.Sprintf(`default: "%v",`, arg.defaultVal))
 	}
+	if len(arg.template) > 0 {
+		sb.WriteString(fmt.Sprintf(`template: [`))
+		for _, val := range arg.template {
+			switch val {
+			case 0:
+				sb.WriteString(fmt.Sprintf(`"Folders",`))
+			case 1:
+				sb.WriteString(fmt.Sprintf(`"Filepaths",`))
+			}
+		}
+		sb.WriteString(fmt.Sprintf(`template: ],`))
+	}
 	sb.WriteString("}")
 	return sb.String()
 }
