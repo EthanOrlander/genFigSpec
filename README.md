@@ -13,8 +13,9 @@ The method of usage will evolve quickly as this package is developed. This is ho
     - Add "github.com/EthanOrlander/genFigSpec" to imports
 3. Attach the `GenFigSpec` command to the root command. This will look like `<rootCmd>.AddCommand(genFigSpec.GenFigSpec)`
 4. Update go.sum using `go mod tidy`
-5. Once you rebuild the CLI with this update, simply use `<cliname> genFigSpec > <cliname>.ts` in your command line.
-6. This creates a TypeScript file **\<cliname\>.ts** containing the skeletal Fig autocomplete spec for your CLI. It can now be copied to [fig/autocomplete](https://github.com/withfig/autocomplete) and completed.
+5. If the project uses go vendors, run `go mod vendor`
+6. Once you rebuild the CLI with this update, simply use `<cliname> genFigSpec > <cliname>.ts` in your command line.
+7. This creates a TypeScript file **\<cliname\>.ts** containing the skeletal Fig autocomplete spec for your CLI. It can now be copied to [fig/autocomplete](https://github.com/withfig/autocomplete) and completed.
 
 ## Example
 
