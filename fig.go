@@ -190,9 +190,9 @@ func (arg *Arg) toTypescript() string {
 		sb.WriteString(fmt.Sprintf(`template: [`))
 		for _, val := range arg.template {
 			switch val {
-			case 0:
+			case FOLDERS:
 				sb.WriteString(fmt.Sprintf(`"folders",`))
-			case 1:
+			case FILEPATHS:
 				sb.WriteString(fmt.Sprintf(`"filepaths",`))
 			}
 		}
