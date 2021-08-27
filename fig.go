@@ -196,7 +196,7 @@ func (arg *Arg) toTypescript() string {
 				sb.WriteString(fmt.Sprintf(`"Filepaths",`))
 			}
 		}
-		sb.WriteString(fmt.Sprintf(`template: ],`))
+		sb.WriteString(fmt.Sprintf(`],`))
 	}
 	sb.WriteString("}")
 	return sb.String()
