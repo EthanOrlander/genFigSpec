@@ -143,11 +143,11 @@ func flagArguments(flag *pflag.Flag) []Arg {
 		}
 		_, foundFilenameAnnotation := flag.Annotations[cobra.BashCompFilenameExt]
 		if foundFilenameAnnotation {
-			arg.template = append(arg.template, Filepaths)
+			arg.template = append(arg.template, FILEPATHS)
 		}
 		_, foundDirectoryAnnotation := flag.Annotations[cobra.BashCompSubdirsInDir]
 		if foundDirectoryAnnotation {
-			arg.template = append(arg.template, Folders)
+			arg.template = append(arg.template, FOLDERS)
 		}
 		args = append(args, arg)
 	}

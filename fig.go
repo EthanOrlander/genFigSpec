@@ -76,8 +76,8 @@ type Arg struct {
 type Template int
 
 const (
-	Folders Template = iota
-	Filepaths
+	FOLDERS Template = iota
+	FILEPATHS
 )
 
 func sanitize(str string) string {
@@ -191,9 +191,9 @@ func (arg *Arg) toTypescript() string {
 		for _, val := range arg.template {
 			switch val {
 			case 0:
-				sb.WriteString(fmt.Sprintf(`"Folders",`))
+				sb.WriteString(fmt.Sprintf(`"folders",`))
 			case 1:
-				sb.WriteString(fmt.Sprintf(`"Filepaths",`))
+				sb.WriteString(fmt.Sprintf(`"filepaths",`))
 			}
 		}
 		sb.WriteString(fmt.Sprintf(`],`))
