@@ -91,6 +91,7 @@ func _subcommands(cmd *cobra.Command, overrideOptions bool, overrides Options) S
 func options(flagSet *pflag.FlagSet) []Option {
 	var opts []Option
 	attachFlags := func(flag *pflag.Flag) {
+
 		option := Option{
 			BaseSuggestion: &BaseSuggestion{
 				displayName: flag.Name,
@@ -101,6 +102,10 @@ func options(flagSet *pflag.FlagSet) []Option {
 		}
 		if flag.Shorthand != "" {
 			option.name = append(option.name, fmt.Sprintf("-%v", flag.Shorthand))
+		}
+		requiredAnnotation, found := flag.Annotations[cobra.BashCompOneRequiredFlag]
+		if found && requiredAnnotation[0] == "true" {
+			option.isRequired = true
 		}
 		option.args = flagArguments(flag)
 		opts = append(opts, option)

@@ -159,6 +159,9 @@ func (option *Option) toTypescript() string {
 	if len(option.args) > 0 {
 		sb.WriteString(fmt.Sprintf(`args: %v,`, option.args.toTypescript()))
 	}
+	if option.isRequired {
+		sb.WriteString(fmt.Sprintf(`isRequired: true,`))
+	}
 	sb.WriteString("}")
 	return sb.String()
 }
