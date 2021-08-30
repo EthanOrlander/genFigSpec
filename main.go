@@ -208,5 +208,3 @@ func makeHelpOption(commandName string) Option {
 		name: []string{"--help", "-h"},
 	}
 }
-
-var derp = NewCmdGenFigSpec()
