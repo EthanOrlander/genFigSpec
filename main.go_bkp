@@ -27,45 +27,18 @@ var includeHidden bool
 
 var generateCommandArgs func(*cobra.Command) Args
 
-type Opts struct {
-	Use                 string
-	Short               string
-	Visible             bool
-	Long                string
-	commandArgGenerator func(*cobra.Command) Args
-}
+type OptionNewCmdGenFigSpec func(*cobra.Command)
 
-func NewCmdGenFigSpec(options ...Opts) *cobra.Command {
-	Use := "genFigSpec"
-	Short := "Generate a fig spec"
-	Hidden := true
-	Long := `
+func NewCmdGenFigSpec(options ...OptionNewCmdGenFigSpec) *cobra.Command {
+	var cmd = &cobra.Command{
+		Use:    "genFigSpec",
+		Short:  "Generate a fig spec",
+		Hidden: true,
+		Long: `
 Fig is a tool for your command line that adds autocomplete.
 This command generates a TypeScript file with the skeleton
 Fig autocomplete spec for your Cobra CLI.
-`
-	if len(options) > 0 {
-		if options[0].Use != "" {
-			Use = options[0].Use
-		}
-		if options[0].Short != "" {
-			Short = options[0].Short
-		}
-		if options[0].Long != "" {
-			Long = options[0].Long
-		}
-		if options[0].Visible {
-			Hidden = false
-		}
-		if options[0].commandArgGenerator != nil {
-			generateCommandArgs = options[0].commandArgGenerator
-		}
-	}
-	var cmd = &cobra.Command{
-		Use:    Use,
-		Short:  Short,
-		Hidden: Hidden,
-		Long:   Long,
+			`,
 		Run: func(cmd *cobra.Command, args []string) {
 			root := cmd.Root()
 			spec := makeFigSpec(root)
@@ -75,7 +48,40 @@ Fig autocomplete spec for your Cobra CLI.
 	cmd.Flags().BoolVar(
 		&includeHidden, "include-hidden", false,
 		"Include hidden commands in generated Fig autocomplete spec")
+	for _, opt := range options {
+		opt(cmd)
+	}
 	return cmd
+}
+
+func Use(use string) OptionNewCmdGenFigSpec {
+	return func(cmd *cobra.Command) {
+		cmd.Use = use
+	}
+}
+
+func Short(short string) OptionNewCmdGenFigSpec {
+	return func(cmd *cobra.Command) {
+		cmd.Short = short
+	}
+}
+
+func Hidden(hidden bool) OptionNewCmdGenFigSpec {
+	return func(cmd *cobra.Command) {
+		cmd.Hidden = hidden
+	}
+}
+
+func Long(long string) OptionNewCmdGenFigSpec {
+	return func(cmd *cobra.Command) {
+		cmd.Long = long
+	}
+}
+
+func CommandArgGenerator(generator func(*cobra.Command) Args) OptionNewCmdGenFigSpec {
+	return func(cmd *cobra.Command) {
+		generateCommandArgs = generator
+	}
 }
 
 func makeFigSpec(root *cobra.Command) Spec {
@@ -209,4 +215,4 @@ func makeHelpOption(commandName string) Option {
 	}
 }
 
-var derp = NewCmdGenFigSpec()
+var derp = NewCmdGenFigSpec(Use("this is the use"))
