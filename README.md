@@ -1,5 +1,7 @@
 # genFigSpec
 
+*README is out of date with [latest breaking change](https://github.com/EthanOrlander/genFigSpec/issues/9). Will update within the next day.*
+
 This package contains a Cobra Command "GenFigSpec", which introspects a Cobra CLI and produces a partial skeleton Fig autocomplete spec.
 
 This package is still in development. The end goal is for it to be used in a GitHub Action that can be easily attached to any Cobra CLI.
