@@ -68,7 +68,7 @@ Fig autocomplete spec for your Cobra CLI.
 		Long:   Long,
 		Run: func(cmd *cobra.Command, args []string) {
 			root := cmd.Root()
-			spec := makeFigSpec(root)
+			spec := MakeFigSpec(root)
 			fmt.Println(spec.toTypescript())
 		},
 	}
@@ -78,7 +78,7 @@ Fig autocomplete spec for your Cobra CLI.
 	return cmd
 }
 
-func makeFigSpec(root *cobra.Command) Spec {
+func MakeFigSpec(root *cobra.Command) Spec {
 	opts := append(options(root.InheritedFlags()), options(root.NonInheritedFlags())...)
 	opts = append(opts, makeHelpOption(root.Name()))
 	spec := Spec{
