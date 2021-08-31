@@ -15,14 +15,6 @@ This package contains a Cobra Command factory "NewCmdGenFigSpec", which introspe
 6. Once you rebuild the CLI with this update, run the command. If you are using the default command, use `<cliname> genFigSpec > <cliname>.ts` in your command line.
 7. This creates a TypeScript file **\<cliname\>.ts** containing the skeletal Fig autocomplete spec for your CLI. It can now be copied to [fig/autocomplete](https://github.com/withfig/autocomplete) and completed.
 
-## Example
-
-As an example, I have performed the above steps in [this fork of pulumi](https://github.com/EthanOrlander/pulumi/tree/genFigSpec).
-You'll see that [**pkg/cmd/pulumi/pulumi.go**](https://github.com/EthanOrlander/pulumi/blob/genFigSpec/pkg/cmd/pulumi/pulumi.go#L39) now imports this package and attaches the command on [line 218](https://github.com/EthanOrlander/pulumi/blob/genFigSpec/pkg/cmd/pulumi/pulumi.go#L218) using `cmd.AddCommand(genFigSpec.NewCmdGenFigSpec(&genFigSpec.Opts{...}))`.
-You'll also see a file [**fig/pulumi.ts**](https://github.com/EthanOrlander/pulumi/blob/genFigSpec/fig/pulumi.ts) that contains the generated skeleton Fig autocomplete spec for Pulumi. (I ran it through Fig's linter manually if you're wondering why it looks formatted).
-
-I've also added the command in [this fork of OpenShift](https://github.com/EthanOrlander/oc/tree/genFigSpec).
-
 ## Opts (customizing the command)
 
 A `genFigSpec.Opts` object can be passed as an argument to the NewCmdGenFigSpec() factory function to customize the command:
@@ -55,3 +47,12 @@ generatorCmd.AddCommand(genFigSpec.NewCmdGenFigSpec(&> genFigSpec.Opts{
 ## Using your own command
 
 If you require even more customization, you can create your own command and simply use the `genFigSpec.MakeFigSpec(rootCmd)` function. This function returns a `Spec` object, from which the TypeScript Fig Spec can be produced using the `toTypescript()`  receiver on `Spec`. The `MakeFigSpec` function accepts a command from which to generate the Spec. In most cases, this will be the root command.
+
+
+## Example
+
+As an example, I have performed the above steps in [this fork of pulumi](https://github.com/EthanOrlander/pulumi/tree/genFigSpec).
+You'll see that [**pkg/cmd/pulumi/pulumi.go**](https://github.com/EthanOrlander/pulumi/blob/genFigSpec/pkg/cmd/pulumi/pulumi.go#L39) now imports this package and attaches the command on [line 218](https://github.com/EthanOrlander/pulumi/blob/genFigSpec/pkg/cmd/pulumi/pulumi.go#L218) using `cmd.AddCommand(genFigSpec.NewCmdGenFigSpec(&genFigSpec.Opts{...}))`.
+You'll also see a file [**fig/pulumi.ts**](https://github.com/EthanOrlander/pulumi/blob/genFigSpec/fig/pulumi.ts) that contains the generated skeleton Fig autocomplete spec for Pulumi. (I ran it through Fig's linter manually if you're wondering why it looks formatted).
+
+I've also added the command in [this fork of OpenShift](https://github.com/EthanOrlander/oc/tree/genFigSpec).
